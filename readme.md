@@ -159,3 +159,40 @@ Your web application will:
   - Adding additional attendance reports.
   - Adding notifications for students (e.g., approval email).
   
+
+/student-attendance-system
+│
+├── /backend                # Backend folder
+│   ├── /config             # Configurations (e.g., MongoDB connection, environment variables)
+│   │   └── db.js
+│   ├── /controllers        # Controller files to handle logic
+│   │   └── studentController.js
+│   │   └── authController.js
+│   ├── /models             # MongoDB models
+│   │   └── student.js
+│   │   └── admin.js
+│   ├── /routes             # Routes for different endpoints
+│   │   └── studentRoutes.js
+│   │   └── authRoutes.js
+│   ├── /middleware         # Middleware for authentication and error handling
+│   │   └── authMiddleware.js
+│   ├── /utils              # Utilities (e.g., QR Code, Google Sheets integration)
+│   │   └── googleSheets.js
+│   │   └── qrCodeScanner.js
+│   ├── app.js              # Main Express app
+│   └── server.js           # Server entry point
+│
+├── /frontend                # Frontend folder for HTML and CSS files
+│   ├── /css                # Stylesheets for frontend
+│   │   └── style.css
+│   ├── /images             # Images like profile pictures
+│   ├── index.html          # Main registration form (student side)
+│   ├── login.html          # Admin login page
+│   ├── dashboard.html      # Admin dashboard to manage registrations
+│   └── attendance.html     # QR code scanning for attendance
+│
+├── /node_modules            # Node.js modules (auto-generated after npm install)
+├── .env                     # Environment variables (MongoDB URI, Google Sheets API key)
+├── package.json             # Project dependencies and scripts
+├── README.md                # Project documentation
+└── .gitignore               # Files to be ignored in Git (e.g., node_modules, .env)
