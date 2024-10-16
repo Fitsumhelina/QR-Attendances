@@ -159,7 +159,6 @@ Your web application will:
   - Adding additional attendance reports.
   - Adding notifications for students (e.g., approval email).
   
-
 /student-attendance-system
 │
 ├── /backend                # Backend folder
@@ -196,3 +195,35 @@ Your web application will:
 ├── package.json             # Project dependencies and scripts
 ├── README.md                # Project documentation
 └── .gitignore               # Files to be ignored in Git (e.g., node_modules, .env)
+```
+
+### Explanation of Folders and Files:
+
+1. **backend/**: Contains all the server-side code, including API routes, models, controllers, and configurations.
+   - **config/db.js**: Handles MongoDB connection using Mongoose.
+   - **controllers/**: Logic for handling requests and responses.
+     - `studentController.js`: Handles student registration, listing, and approval.
+     - `authController.js`: Handles admin login and authentication.
+   - **models/**: MongoDB schemas for students and admins.
+     - `student.js`: Schema for student registration and attendance.
+     - `admin.js`: Schema for admin users.
+   - **routes/**: Defines the API routes for different functionalities.
+     - `studentRoutes.js`: Routes for student registration and attendance.
+     - `authRoutes.js`: Routes for admin login and authentication.
+   - **middleware/**: Middleware functions, such as `authMiddleware.js` for verifying JWT tokens for admin users.
+   - **utils/**: Utility functions, such as integrating Google Sheets and scanning QR codes.
+     - `googleSheets.js`: Google Sheets integration for saving data.
+     - `qrCodeScanner.js`: QR code reader for attendance.
+   - **app.js**: Main Express application file where routes and middleware are set up.
+   - **server.js**: Server entry point that listens on the configured port.
+
+2. **frontend/**: Contains all static files and frontend pages.
+   - **css/**: Stylesheets for designing the frontend.
+   - **index.html**: The student registration form.
+   - **login.html**: Admin login page for authentication.
+   - **dashboard.html**: Admin dashboard to view student registrations and attendance.
+   - **attendance.html**: Page where the admin scans student QR codes for attendance.
+
+3. **package.json**: Lists the project dependencies (e.g., Express, Mongoose, Google Sheets API) and scripts to start the project.
+
+4. **.env**: Stores environment variables like MongoDB URI, Google Sheets API credentials, and JWT secret.
