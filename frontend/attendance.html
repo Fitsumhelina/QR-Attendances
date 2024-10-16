@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Take Attendance</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="attendance-container">
+    <h1>Scan Student QR Code for Attendance</h1>
+    <form id="attendanceForm">
+      <label for="studentId">Enter Student ID</label>
+      <input type="text" id="studentId" name="studentId" required>
+
+      <button type="submit">Mark Attendance</button>
+    </form>
+    <p id="attendanceMessage"></p>
+  </div>
+
+  <script>
+    document.getElementById('attendanceForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const studentId = document.getElementById('studentId').value;
+
+      try {
+        const res = await fetch('http://localhost:5000/api/attendance', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token') },
+          body: JSON.stringify({ studentId })
+        });
+
+        const data = await res.json();
+        document.getElementById('attendanceMessage').textContent = data.message;
+      } catch (error) {
+        console.error('Error marking attendance:', error);
+      }
+    });
+  </script>
+</body>
+</html>
