@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <h1>Student Dashboard</h1>
+
+    <div id="studentList"></div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+
+    async function fetchStudents() {
+      try {
+        const res = await fetch('http://localhost:5000/students', {
+          headers: { Authorization: token },
+        });
+
+        const students = await res.json();
+        const studentList = document.getElementById('studentList');
+        students.forEach((student) => {
+          const studentDiv = document.createElement('div');
+          studentDiv.textContent = `${student.fullName} (${student.studentId}) - ${student.approved ? 'Approved' : 'Pending'}`;
+          studentList.appendChild(studentDiv);
+        });
+      } catch (error) {
+        console.error('Error fetching students:', error);
+      }
+    }
+
+    fetchStudents();
+  </script>
+</body>
+</html>
