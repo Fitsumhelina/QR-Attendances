@@ -1,0 +1,21 @@
+{
+  "name": "qr-attendance",
+  "version": "1.0.0",
+  "description": "Your web application will:\r 1. **User Registration**: Students will register themselves by providing personal details including their university ID (with a QR code), and this registration will go to the admin's dashboard for approval.\r 2. **Admin Approval**: Admin can approve or disapprove the registration, with approved data stored in Google Sheets.\r 3. **Attendance Management**: Admin can scan students' QR codes to mark attendance and record it in the Google Sheet.\r 4. **Registration Management**: Admin controls when registration is open or closed.\r 5. **Student Search**: Admin can search for specific student data using their ID number.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "googleapis": "^144.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.7.1",
+    "qrcode": "^1.5.4"
+  }
+}
