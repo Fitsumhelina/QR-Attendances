@@ -170,7 +170,6 @@ This project is divided into two main sections: **backend** and **frontend**, ea
 
 ## Project Structure
 
-```
 /student-attendance-system
 │
 ├── /backend                # Backend folder
@@ -196,6 +195,6 @@ This project is divided into two main sections: **backend** and **frontend**, ea
 ├── package.json             # Project dependencies and scripts
 ├── README.md                # Project documentation
 └── .gitignore               # Files to be ignored in Git (e.g., node_modules, .env)
-```
+
 
 
