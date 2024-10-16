@@ -13,16 +13,16 @@
             <input type="email" id="email" placeholder="Email" required>
             <input type="password" id="password" placeholder="Password" required>
             <button type="submit">Login</button>
-            <p id="login-error"></p>
+            <p id="login-error" style="color: red;"></p> <!-- Changed to red for error visibility -->
         </form>
     </div>
 
     <div id="attendance-container" style="display:none;">
         <h2>Mark Attendance</h2>
         <form id="attendance-form">
-            <input type="text" id="student-id" placeholder="Enter Student ID" required>
+            <input type="text" id="qrInput" placeholder="Scan QR Code" required>
             <button type="submit">Submit Attendance</button>
-            <p id="attendance-message"></p>
+            <p id="attendance-message" style="color: green;"></p> <!-- Changed to green for success message -->
         </form>
     </div>
 

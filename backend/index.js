@@ -1,88 +1,56 @@
-require('dotenv').config();
+// server.js
+
 const express = require('express');
 const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const { google } = require('googleapis');
-const fs = require('fs');
+const cors = require('cors');
+const { GoogleSpreadsheet } = require('google-spreadsheet');
+require('dotenv').config();
 
-// Initialize Express
 const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
+app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('frontend'));
 
-// Load Google Sheets credentials
-const credentials = JSON.parse(fs.readFileSync('credentials.json'));
-const SHEET_ID = process.env.GOOGLE_SHEET_ID;
-const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
-const auth = new google.auth.GoogleAuth({
-    credentials,
-    scopes: SCOPES,
-});
+// Sample user for authentication (in production, use a database)
+const users = [{ email: 'test@example.com', password: 'password123' }]; // Replace with your registered email and password
 
-const preRegisteredEmail = process.env.PRE_REGISTERED_EMAIL;
-const preRegisteredPassword = process.env.PRE_REGISTERED_PASSWORD;
-const JWT_SECRET = process.env.JWT_SECRET;
+// Google Sheet Setup
+const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID);
 
-// Helper function to mark attendance in Google Sheets
-async function markAttendance(studentId) {
-    const sheets = google.sheets({ version: 'v4', auth: await auth.getClient() });
-    const date = new Date().toLocaleDateString();
-
-    const request = {
-        spreadsheetId: SHEET_ID,
-        range: 'Sheet1!A2:B', // Adjust as needed
-        valueInputOption: 'RAW',
-        insertDataOption: 'INSERT_ROWS',
-        resource: {
-            values: [[studentId, date]],
-        },
-    };
-
-    try {
-        await sheets.spreadsheets.values.append(request);
-        console.log(`Attendance marked for ${studentId} on ${date}`);
-        return { success: true };
-    } catch (err) {
-        console.error('Error writing to Google Sheets:', err);
-        return { success: false };
-    }
+async function authenticate() {
+    await doc.useServiceAccountAuth(require('./credentials.json'));
 }
 
-// Login endpoint
-app.post('/login', async (req, res) => {
+app.post('/login', (req, res) => {
     const { email, password } = req.body;
-    if (email === preRegisteredEmail && await bcrypt.compare(password, preRegisteredPassword)) {
-        const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '1h' });
-        return res.status(200).json({ token });
+    const user = users.find((u) => u.email === email && u.password === password);
+    if (user) {
+        res.json({ success: true });
+    } else {
+        res.json({ success: false, message: 'Invalid email or password' });
     }
-    return res.status(401).json({ error: 'Invalid credentials' });
 });
 
-// Protected route for marking attendance
-app.post('/mark-attendance', (req, res) => {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) return res.status(403).json({ error: 'Unauthorized' });
+app.post('/attendance', async (req, res) => {
+    const { qrCode } = req.body; // Assume qrCode is the student ID
 
     try {
-        jwt.verify(token, JWT_SECRET);
-        const { studentId } = req.body;
-        if (!studentId) return res.status(400).json({ error: 'Student ID is required' });
+        await authenticate();
+        await doc.loadInfo(); // Loads document properties and worksheets
 
-        markAttendance(studentId).then(result => {
-            if (result.success) {
-                res.status(200).json({ message: 'Attendance marked successfully!' });
-            } else {
-                res.status(500).json({ error: 'Failed to mark attendance' });
-            }
-        });
-    } catch (err) {
-        res.status(403).json({ error: 'Unauthorized' });
+        const sheet = doc.sheetsByIndex[0]; // Use the first sheet
+        await sheet.addRow({ StudentID: qrCode, Timestamp: new Date() }); // Log attendance
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error writing to sheet:', error);
+        res.json({ success: false, message: 'Failed to log attendance' });
     }
 });
 
-// Start the server
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
