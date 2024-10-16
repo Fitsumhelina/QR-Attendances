@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Registration</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="registration-container">
+    <h1>Student Registration Form</h1>
+    <form id="registrationForm">
+      <label for="fullName">Full Name</label>
+      <input type="text" id="fullName" name="fullName" required>
+
+      <label for="studentId">University ID</label>
+      <input type="text" id="studentId" name="studentId" required>
+
+      <label for="age">Age</label>
+      <input type="number" id="age" name="age" required>
+
+      <label for="sex">Sex</label>
+      <select id="sex" name="sex" required>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label for="department">Department</label>
+      <select id="department" name="department" required>
+        <option value="Computer Science">Computer Science</option>
+        <option value="Engineering">Engineering</option>
+        <option value="Business">Business</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="phone">Phone</label>
+      <input type="text" id="phone" name="phone" required>
+
+      <label for="interests">Interests</label>
+      <input type="text" id="interests" name="interests">
+
+      <label for="experience">Experience</label>
+      <input type="text" id="experience" name="experience">
+
+      <label for="profilePicture">Profile Picture</label>
+      <input type="file" id="profilePicture" name="profilePicture" required>
+
+      <button type="submit">Submit</button>
+    </form>
+    <p id="message"></p>
+  </div>
+
+  <script>
+    document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(document.getElementById('registrationForm'));
+      
+      try {
+        const res = await fetch('http://localhost:5000/api/students/register', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        document.getElementById('message').textContent = data.message;
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    });
+  </script>
+</body>
+</html>
