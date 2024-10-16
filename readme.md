@@ -159,6 +159,7 @@ Your web application will:
   - Adding additional attendance reports.
   - Adding notifications for students (e.g., approval email).
   
+  
 /student-attendance-system
 │
 ├── /backend                # Backend folder
@@ -195,7 +196,7 @@ Your web application will:
 ├── package.json             # Project dependencies and scripts
 ├── README.md                # Project documentation
 └── .gitignore               # Files to be ignored in Git (e.g., node_modules, .env)
-```
+
 
 ### Explanation of Folders and Files:
 
